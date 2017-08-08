@@ -70,6 +70,9 @@ object DiffyServiceModule extends TwitterModule {
   val skipEmailsWhenNoErrors =
     flag[Boolean]("skipEmailsWhenNoErrors", false, "Do not send emails if there are no critical errors")
 
+  val mailSmtpHost =
+    flag[String]("mailSmtpHost", "localhost", "Email relay host")
+
   @Provides
   @Singleton
   def settings =
@@ -93,7 +96,8 @@ object DiffyServiceModule extends TwitterModule {
       rootUrl(),
       allowHttpSideEffects(),
       excludeHttpHeadersComparison(),
-      skipEmailsWhenNoErrors()
+      skipEmailsWhenNoErrors(),
+      mailSmtpHost()
     )
 
   @Provides

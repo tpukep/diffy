@@ -12,7 +12,6 @@ import com.twitter.util.TimeConversions._
 
 trait Workflow {
   val log: Logger = Logger(classOf[Workflow])
-  val emailSender = new EmailSender(log)
   val delay: Duration
 
   val timer: Timer

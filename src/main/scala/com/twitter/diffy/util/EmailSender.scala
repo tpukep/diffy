@@ -2,10 +2,12 @@ package com.twitter.diffy.util
 
 import com.twitter.logging.Logger
 import com.twitter.util.{FuturePool, Future}
+import com.twitter.diffy.proxy.Settings
 
 import javax.mail._
 import javax.mail.internet.{InternetAddress, MimeMessage}
 import java.util.Properties
+
 
 case class SimpleMessage(
   from: String,
@@ -14,9 +16,9 @@ case class SimpleMessage(
   subject: String,
   body: String)
 
-class EmailSender(log: Logger, send: MimeMessage => Unit = Transport.send) {
+class EmailSender(settings: Settings, log: Logger, send: MimeMessage => Unit = Transport.send) {
   private[this] val props = new Properties
-  props.put("mail.smtp.host", "localhost")
+  props.put("mail.smtp.host", settings.mailSmtpHost)
   props.put("mail.smtp.auth", "false")
   props.put("mail.smtp.port", "25")
 
@@ -36,6 +38,7 @@ class EmailSender(log: Logger, send: MimeMessage => Unit = Transport.send) {
       )
       message.setSubject(msg.subject)
       message.setContent(msg.body, "text/html; charset=utf-8")
+
       try {
         send(message)
       } catch { case e =>

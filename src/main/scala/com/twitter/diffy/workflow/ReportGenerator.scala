@@ -35,7 +35,7 @@ class ReportGenerator @Inject()(
   import ReportGenerator._
 
   private[this] val log: Logger = Logger(classOf[ReportGenerator])
-  private[this] val emailSender = new EmailSender(log)
+  private[this] val emailSender = new EmailSender(settings, log)
 
   private[this] def sendReport(report: ReportData) =
     emailSender(buildMessage(report))
@@ -95,6 +95,7 @@ class ReportGenerator @Inject()(
     if (reportData.criticalDiffs == 0 && settings.skipEmailsWhenNoErrors) {
       Future.Unit
     } else {
+      log.info("Sending report")
       sendReport(reportData)
     }
 

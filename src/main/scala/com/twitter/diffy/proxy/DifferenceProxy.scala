@@ -62,6 +62,9 @@ trait DifferenceProxy {
 
   def proxy = new Service[Req, Rep] {
     override def apply(req: Req): Future[Rep] = {
+
+      /// HttpRequest
+
       val rawResponses =
         multicastHandler(req) respond {
           case Return(_) => log.debug("success networking")
